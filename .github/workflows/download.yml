@@ -6,10 +6,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2.1.0
-    - uses: actions/setup-node@v2.1.1
-      with: 
-        node-version: v14.3.0  
-    - name: Prepare your file
+    - uses: actions/setup-python@v2
+      with:
+        python-version: '3.8'
+    - name: Download and Upload
       run: |
         mkdir download
         git clone "https://github.com/${GITHUB_REPOSITORY}.wiki.git"
@@ -19,12 +19,9 @@ jobs:
         export drive
         cd ..
         wget `cat $wiki/$drive | xargs` --directory-prefix=download
-        npm i
-        npm start
+        pip install requirements.txt
+        python upload.py
       env: 
-        url: ${{ secrets.url }}
-        username: ${{ secrets.username }}
-        password: ${{ secrets.password }}
         nutstore_url: ${{ secrets.nutstore_url }}
         nutstore_username: ${{ secrets.nutstore_username }}
         nutstore_password: ${{ secrets.nutstore_password }}
